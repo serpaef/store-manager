@@ -27,7 +27,7 @@ function verifyQuantity(quantity) {
 }
 
 async function create(name, quantity) {
-  const product = await Products.create({ name, quantity });
+  const product = await Products.create(name, quantity);
   return product;
 }
 
