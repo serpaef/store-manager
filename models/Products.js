@@ -2,8 +2,8 @@ const connection = require('./connection');
 
 async function getByName(name) {
   const query = 'SELECT * FROM products WHERE name = ?;';
-  const result = await connection.execute(query, [name]);
-  return result;
+  const [result] = await connection.execute(query, [name]);
+  return result[0];
 }
 
 async function create(name, quantity) {
