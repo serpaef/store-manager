@@ -1,3 +1,5 @@
+const Products = require('../models/Products');
+
 function sendError(status, message) {
   return { status, message };
 }
@@ -12,7 +14,13 @@ function verifyName(name) {
   }
 }
 
+async function verifyDuplicate(name) {
+  const product = await Products.getByName(name);
+  if (product) return sendError(409, 'Product already exists');
+}
+
 module.exports = {
   sendError,
   verifyName,
+  verifyDuplicate,
 };
