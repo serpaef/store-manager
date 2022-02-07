@@ -19,8 +19,16 @@ async function verifyDuplicate(name) {
   if (product) return sendError(409, 'Product already exists');
 }
 
+function verifyQuantity(quantity) {
+  if (quantity === null || quantity === undefined) return sendError(400, '"quantity" is required');
+  if (typeof quantity !== 'number' || quantity < 1) {
+    return sendError(422, '"quantity" must be a number larger than or equal to 1');
+  }
+}
+
 module.exports = {
   sendError,
   verifyName,
   verifyDuplicate,
+  verifyQuantity,
 };
