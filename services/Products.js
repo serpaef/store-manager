@@ -36,6 +36,11 @@ async function getAll() {
   return list;
 }
 
+async function getById(id) {
+  const product = await Products.getById(id);
+  return product;
+}
+
 module.exports = {
   sendError,
   verifyName,
@@ -43,4 +48,5 @@ module.exports = {
   verifyQuantity,
   create,
   getAll,
+  getById,
 };
