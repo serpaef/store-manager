@@ -39,9 +39,18 @@ async function readAll() {
   return sales;
 }
 
+async function getById(id) {
+  const query = 'SELECT \'date\', product_id, quantity '
+  + 'FROM sales_products as sp INNER JOIN sales as s ON sp.sale_id = s.id '
+  + 'WHERE sp.sale_id = ?';
+  const [sale] = await connection.execute(query, [id]);
+  return sale;
+}
+
 module.exports = {
   generateSale,
   registerSale,
   create,
   readAll,
+  getById,
 };
