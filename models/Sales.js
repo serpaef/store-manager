@@ -32,15 +32,16 @@ async function create(sales) {
   return { id, itemsSold };
 }
 
-async function getAll() {
-  const query = 'SELECT * FROM sales';
-  const [list] = connection.execute(query, []);
-  return list;
+async function readAll() {
+  const query = 'SELECT sale_id AS saleId, \'date\', product_id, quantity FROM '
+  + 'sales_products as sp INNER JOIN sales as s ON sp.sale_id = s.id;';
+  const [sales] = await connection.execute(query, []);
+  return sales;
 }
 
 module.exports = {
-  getAll,
   generateSale,
   registerSale,
   create,
+  readAll,
 };
