@@ -40,8 +40,8 @@ async function getById(id) {
 }
 
 async function update(id, sale) {
-  await Sales.update(id, sale[0]);
-  const [sales] = await Sales.getById(id);
+  await Sales.update(id, sale);
+  const sales = await Sales.getItemSoldBySaleId(id);
   const updatedSale = {
     saleId: id,
     itemUpdated: sales,
