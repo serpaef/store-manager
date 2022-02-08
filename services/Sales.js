@@ -39,6 +39,16 @@ async function getById(id) {
   return sales;
 }
 
+async function update(id, sale) {
+  await Sales.update(id, sale[0]);
+  const [sales] = await Sales.getById(id);
+  const updatedSale = {
+    saleId: id,
+    itemUpdated: sales,
+  };
+  return updatedSale;
+}
+
 module.exports = {
   sendError,
   verifyProductId,
@@ -46,4 +56,5 @@ module.exports = {
   create,
   readAll,
   getById,
+  update,
 };
