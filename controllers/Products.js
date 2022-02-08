@@ -14,11 +14,18 @@ async function validateName(req, res, next) {
       .json({ message: nameValidation.message });
   }
 
-  const nameDuplicate = await Products.verifyDuplicate(name);
-  if (nameDuplicate) {
+  next();
+}
+
+async function verifyDuplicate(req, res, next) {
+  const { name } = req.body;
+
+  const duplicate = await Products.verifyDuplicate(name);
+  
+  if (duplicate) {
     return res
-      .status(nameDuplicate.status)
-      .json({ message: nameDuplicate.message });
+      .status(duplicate.status)
+      .json({ message: duplicate.message });
   }
 
   next();
@@ -73,6 +80,7 @@ async function updateProduct(req, res) {
 productsRoute
 .post('/', 
   validateName,
+  verifyDuplicate,
   verifyQuantity,
   create)
 .get('/:id',
