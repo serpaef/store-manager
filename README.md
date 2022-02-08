@@ -1,5 +1,3 @@
-WIP...
-
 # store-manager
 
 Projeto desenvolvido durante o módulo de back-end do curso de desenvolvimento web da Trybe.
