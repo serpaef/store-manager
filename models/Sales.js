@@ -58,5 +58,6 @@ module.exports = {
   create,
   readAll,
   getById,
+  getItemSoldBySaleId,
   update,
 };
