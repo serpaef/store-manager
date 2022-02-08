@@ -3,7 +3,7 @@ const Products = require('../services/Products');
 
 const productsRoute = express.Router();
 
-async function validateName(req, res, next) {
+function validateName(req, res, next) {
   const { name } = req.body;
 
   const nameValidation = Products.verifyName(name);
