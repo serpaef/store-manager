@@ -34,10 +34,16 @@ async function readAll() {
   return sales;
 }
 
+async function getById(id) {
+  const sales = await Sales.getById(id);
+  return sales;
+}
+
 module.exports = {
   sendError,
   verifyProductId,
   verifyProductQuantity,
   create,
   readAll,
+  getById,
 };
