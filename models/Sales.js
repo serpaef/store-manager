@@ -47,10 +47,16 @@ async function getById(id) {
   return sale;
 }
 
+async function update(id, sale) {
+  const query = 'UPDATE sales_products SET product_id = ?, quantity = ? WHERE sale_id = ?;';
+  await connection.execute(query, [sale.product_id, sale.quantity, id]);
+}
+
 module.exports = {
   generateSale,
   registerSale,
   create,
   readAll,
   getById,
+  update,
 };
