@@ -58,6 +58,18 @@ async function getById(req, res) {
   return res.status(200).json(product);
 }
 
+async function updateProduct(req, res) {
+  const { id } = req.params;
+  const { name, quantity } = req.body;
+  
+  const product = await Products.getById(id);
+  if (!product) return res.status(404).json({ message: 'Product not found' });
+
+  const updatedProduct = await Products.updateProduct(id, name, quantity);
+
+  return res.status(200).json(updatedProduct);
+}
+
 productsRoute
 .post('/', 
   validateName,
@@ -66,6 +78,10 @@ productsRoute
 .get('/:id',
   getById)
 .get('/',
-  getAll);
+  getAll)
+.put('/:id',
+  validateName,
+  verifyQuantity,
+  updateProduct);
 
 module.exports = productsRoute;
