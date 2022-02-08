@@ -37,6 +37,13 @@ async function getById(req, res) {
   return res.status(200).json(sale);
 }
 
+async function update(req, res) {
+  const { id } = req.params;
+  const sale = req.body;
+  const updatedSale = await Sales.update(id, sale);
+  return res.status(200).json(updatedSale);
+}
+
 salesRoute
 .post('/',
   verifyProductId, 
@@ -45,6 +52,10 @@ salesRoute
 .get('/:id',
   getById)
 .get('/',
-  readAll);
+  readAll)
+.put('/:id',
+ verifyProductId,
+ verifyProductQuantity,
+ update);
 
 module.exports = salesRoute;
