@@ -49,6 +49,11 @@ async function update(id, sale) {
   return updatedSale;
 }
 
+async function deleteSale(id) {
+  const saleDeleted = await Sales.deleteSale(id);
+  return saleDeleted;
+}
+
 module.exports = {
   sendError,
   verifyProductId,
@@ -57,4 +62,5 @@ module.exports = {
   readAll,
   getById,
   update,
+  deleteSale,
 };
