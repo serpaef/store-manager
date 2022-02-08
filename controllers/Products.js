@@ -77,6 +77,17 @@ async function updateProduct(req, res) {
   return res.status(200).json(updatedProduct);
 }
 
+async function deleteProduct(req, res) {
+  const { id } = req.params;
+
+  const product = await Products.getById(id);
+  if (!product) return res.status(404).json({ message: 'Product not found' });
+
+  await Products.deleteProduct(id);
+
+  return res.status(200).json(product);
+}
+
 productsRoute
 .post('/', 
   validateName,
@@ -90,6 +101,8 @@ productsRoute
 .put('/:id',
   validateName,
   verifyQuantity,
-  updateProduct);
+  updateProduct)
+.delete('/:id',
+  deleteProduct);
 
 module.exports = productsRoute;
