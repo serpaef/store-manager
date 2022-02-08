@@ -39,7 +39,7 @@ async function getById(req, res) {
 
 async function update(req, res) {
   const { id } = req.params;
-  const sale = req.body;
+  const [sale] = req.body;
   const updatedSale = await Sales.update(id, sale);
   return res.status(200).json(updatedSale);
 }
