@@ -1,4 +1,5 @@
 const Sales = require('../models/Sales');
+const ProductService = require('./Products');
 
 function sendError(status, message) {
   return { status, message };
@@ -20,6 +21,16 @@ function verifyProductQuantity(sale) {
     return sendError(
       422,
       '"quantity" must be a number larger than or equal to 1',
+    );
+  }
+}
+
+async function verifyProductAvailability(productId, quantity) {
+  const product = await ProductService.getById(productId);
+  if (product.quantity < quantity) {
+    return sendError(
+      422,
+      'Such amount is not permitted to sell',
     );
   }
 }
@@ -58,6 +69,7 @@ module.exports = {
   sendError,
   verifyProductId,
   verifyProductQuantity,
+  verifyProductAvailability,
   create,
   readAll,
   getById,
