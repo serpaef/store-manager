@@ -31,10 +31,16 @@ async function create(name, quantity) {
   return product;
 }
 
+async function getAll() {
+  const list = await Products.getAll();
+  return list;
+}
+
 module.exports = {
   sendError,
   verifyName,
   verifyDuplicate,
   verifyQuantity,
   create,
+  getAll,
 };
