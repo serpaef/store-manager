@@ -40,7 +40,7 @@ async function readAll() {
 }
 
 async function getById(id) {
-  const query = 'SELECT \'date\', product_id, quantity '
+  const query = 'SELECT "date", product_id, quantity '
   + 'FROM sales_products as sp INNER JOIN sales as s ON sp.sale_id = s.id '
   + 'WHERE sp.sale_id = ?';
   const [sale] = await connection.execute(query, [id]);
@@ -52,6 +52,18 @@ async function update(id, sale) {
   await connection.execute(query, [sale.product_id, sale.quantity, id]);
 }
 
+async function deleteSale(id) {
+  const salesQuery = 'DELETE FROM sales WHERE id = ?;';
+  const spQuery = 'DELETE FROM sales_products WHERE sale_id = ?;';
+  
+  const sale = await getById(id);
+
+  await connection.execute(salesQuery, [id]);
+  await connection.execute(spQuery, [id]);
+
+  return sale;
+}
+
 module.exports = {
   generateSale,
   registerSale,
@@ -60,4 +72,5 @@ module.exports = {
   getById,
   getItemSoldBySaleId,
   update,
+  deleteSale,
 };
