@@ -3,11 +3,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const productController = require('./controllers/Products');
+const salesController = require('./controllers/Sales');
 
 const app = express();
 app.use(bodyParser.json());
 
 app.use('/products', productController);
+app.use('/sales', salesController);
 
 const { PORT } = process.env;
 
