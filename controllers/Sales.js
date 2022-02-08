@@ -19,6 +19,24 @@ function verifyProductQuantity(req, res, next) {
   next();
 }
 
+async function verifyProductAvailability(req, res, next) {
+  const sales = req.body;
+  
+  const errorList = [];
+  for (let i = 0; i < sales.length; i += 1) {
+    errorList.push(Sales.verifyProductAvailability(sales[0].product_id, sales[0].quantity));
+  }
+
+  const resolve = await Promise.all(errorList);
+  for (let i = 0; i < resolve.length; i += 1) {
+    if (resolve[i]) {
+      return res.status(resolve[i].status).json({ message: resolve[i].message });
+    }
+  }
+
+  next();
+}
+
 async function create(req, res) {
   const sales = req.body;
   const closedSale = await Sales.create(sales);
@@ -56,6 +74,7 @@ salesRoute
 .post('/',
   verifyProductId, 
   verifyProductQuantity,
+  verifyProductAvailability,
   create)
 .get('/:id',
   getById)
