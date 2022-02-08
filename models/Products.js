@@ -19,8 +19,15 @@ async function getAll() {
   return list;
 }
 
+async function getById(id) {
+  const query = 'SELECT * FROM products WHERE id = ?;';
+  const [result] = await connection.execute(query, [id]);
+  return result[0];
+}
+
 module.exports = {
   create,
   getAll,
   getByName,
+  getById,
 };
