@@ -13,7 +13,7 @@ function verifyProductId(sales) {
 }
 
 function verifyProductQuantity(sale) {
-  if (!sale.quantity) {
+  if (sale.quantity === null || sale.quantity === undefined) {
     return sendError(400, '"quantity" is required');
   }
   if (typeof sale.quantity !== 'number' || sale.quantity < 1) {
