@@ -1,7 +1,34 @@
 const express = require('express');
+const Sales = require('../services/Sales');
 
 const salesRoute = express.Router();
 
-salesRoute.get('/', (_req, res) => res.status(200).json({ message: 'sup' }));
+function verifyProductId(req, res, next) {
+  const sales = req.body;
+  const error = Sales.verifyProductId(sales);
+  if (error) return res.status(error.status).json({ message: error.message });
+  next();
+}
+
+function verifyProductQuantity(req, res, next) {
+  const sales = req.body;
+  for (let i = 0; i < sales.length; i += 1) {
+    const error = Sales.verifyProductQuantity(sales[i]);
+    if (error) return res.status(error.status).json({ message: error.message });
+  }
+  next();
+}
+
+async function create(req, res) {
+  const sales = req.body;
+  const closedSale = await Sales.create(sales);
+  return res.status(201).json(closedSale);
+}
+
+salesRoute
+.post('/',
+  verifyProductId, 
+  verifyProductQuantity,
+  create);
 
 module.exports = salesRoute;
