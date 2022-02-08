@@ -41,6 +41,11 @@ async function getById(id) {
   return product;
 }
 
+async function updateProduct(id, name, quantity) {
+  const product = await Products.updateProduct(id, name, quantity);
+  return product;
+}
+
 module.exports = {
   sendError,
   verifyName,
@@ -49,4 +54,5 @@ module.exports = {
   create,
   getAll,
   getById,
+  updateProduct,
 };
