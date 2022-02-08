@@ -44,6 +44,14 @@ async function update(req, res) {
   return res.status(200).json(updatedSale);
 }
 
+async function deleteSale(req, res) {
+  const { id } = req.params;
+  const sale = await Sales.getById(id);
+  if (!sale || sale.length < 1) return res.status(404).json({ message: 'Sale not found' });
+  const deletedItems = await Sales.deleteSale(id);
+  return res.status(200).json(deletedItems);
+}
+
 salesRoute
 .post('/',
   verifyProductId, 
@@ -56,6 +64,8 @@ salesRoute
 .put('/:id',
  verifyProductId,
  verifyProductQuantity,
- update);
+ update)
+.delete('/:id',
+  deleteSale);
 
 module.exports = salesRoute;
