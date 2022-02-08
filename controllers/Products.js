@@ -44,9 +44,17 @@ async function create(req, res) {
   return res.status(201).json(product);
 }
 
-productsRoute.post('/', 
+async function getAll(_req, res) {
+  const list = await Products.getAll();
+  return res.status(200).json(list);
+}
+
+productsRoute
+.post('/', 
   validateName,
   verifyQuantity,
-  create);
+  create)
+.get('/',
+  getAll);
 
 module.exports = productsRoute;
