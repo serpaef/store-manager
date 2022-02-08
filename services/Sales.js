@@ -29,9 +29,15 @@ async function create(sales) {
   return sale;
 }
 
+async function readAll() {
+  const sales = await Sales.readAll();
+  return sales;
+}
+
 module.exports = {
   sendError,
   verifyProductId,
   verifyProductQuantity,
   create,
+  readAll,
 };
