@@ -30,11 +30,20 @@ async function readAll(_req, res) {
   return res.status(200).json(sales);
 }
 
+async function getById(req, res) {
+  const { id } = req.params;
+  const sale = await Sales.getById(id);
+  if (!sale || sale.length < 1) return res.status(404).json({ message: 'Sale not found' });
+  return res.status(200).json(sale);
+}
+
 salesRoute
 .post('/',
   verifyProductId, 
   verifyProductQuantity,
   create)
+.get('/:id',
+  getById)
 .get('/',
   readAll);
 
