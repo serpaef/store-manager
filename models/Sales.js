@@ -10,11 +10,11 @@ async function registerSale(saleId, products) {
   const query = 'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES ?;';
   const values = products.map((product) => ([[saleId], [product.product_id], [product.quantity]]));
   /*
-    https://stackoverflow.com/questions/67672322/bulk-insert-with-mysql2-and-nodejs-throws-500
-    o connection.execute não consegue fazer bulk-insertions no banco de dados,
-    para isso fazemos uso do connection.query 
+  https://stackoverflow.com/questions/67672322/bulk-insert-with-mysql2-and-nodejs-throws-500
+  o connection.execute não consegue fazer bulk-insertions no banco de dados,
+  para isso fazemos uso do connection.query 
   */
-  await connection.query(query, [values]);
+ await connection.query(query, [values]);
 }
 
 async function getItemSoldBySaleId(id) {
@@ -23,11 +23,27 @@ async function getItemSoldBySaleId(id) {
   return sales;
 }
 
+async function updateQuantity(productId, operation, quantity) {
+  let query;
+  if (operation === '-') {
+    query = 'UPDATE products SET quantity = quantity - ? WHERE id = ?';
+  } else if (operation === '+') {
+    query = 'UPDATE products SET quantity = quantity + ? WHERE id = ?';
+  } else {
+    return console.error('invalid operation');
+  }
+  await connection.execute(query, [quantity, productId]);
+}
+
 async function create(sales) {
   const id = await generateSale();
   await registerSale(id, sales);
 
   const itemsSold = await getItemSoldBySaleId(id);
+
+  await Promise.all(sales.map(async (sale) => {
+    await updateQuantity(sale.product_id, '-', sale.quantity);
+  }));
 
   return { id, itemsSold };
 }
@@ -56,12 +72,16 @@ async function deleteSale(id) {
   const salesQuery = 'DELETE FROM sales WHERE id = ?;';
   const spQuery = 'DELETE FROM sales_products WHERE sale_id = ?;';
   
-  const sale = await getById(id);
+  const sales = await getById(id);
+
+  await Promise.all(sales.map(async (sale) => {
+    await updateQuantity(sale.product_id, '+', sale.quantity);
+  }));
 
   await connection.execute(salesQuery, [id]);
   await connection.execute(spQuery, [id]);
 
-  return sale;
+  return sales;
 }
 
 module.exports = {
@@ -73,4 +93,5 @@ module.exports = {
   getItemSoldBySaleId,
   update,
   deleteSale,
+  updateQuantity,
 };
