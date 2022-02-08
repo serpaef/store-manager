@@ -46,6 +46,10 @@ async function updateProduct(id, name, quantity) {
   return product;
 }
 
+async function deleteProduct(id) {
+  await Products.deleteProduct(id);
+}
+
 module.exports = {
   sendError,
   verifyName,
@@ -55,4 +59,5 @@ module.exports = {
   getAll,
   getById,
   updateProduct,
+  deleteProduct,
 };
