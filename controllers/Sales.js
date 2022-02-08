@@ -25,10 +25,17 @@ async function create(req, res) {
   return res.status(201).json(closedSale);
 }
 
+async function readAll(_req, res) {
+  const sales = await Sales.readAll();
+  return res.status(200).json(sales);
+}
+
 salesRoute
 .post('/',
   verifyProductId, 
   verifyProductQuantity,
-  create);
+  create)
+.get('/',
+  readAll);
 
 module.exports = salesRoute;
